@@ -4,7 +4,6 @@ import { FormControl, FormGroup, Validators  } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { User } from 'src/app/models/user_model';
 import { UsersService } from 'src/app/services/users.service';
-
 import { formatDate } from "@angular/common";
 
 
@@ -18,8 +17,8 @@ import { formatDate } from "@angular/common";
 export class AddUserComponent implements OnInit {
   myForm!: FormGroup;
   public idUser!:any;
-  modoEdicion: boolean = false;
-  ignorarExistenCambiosPendientes: boolean = false;
+  editMode: boolean = false;
+  ignoreExistPendingChanges: boolean = false;
 
    newuser: User = {
     idUser:0,
@@ -49,7 +48,7 @@ export class AddUserComponent implements OnInit {
   }
 
 existenCambiosPendientes(): boolean {
-  if (this.ignorarExistenCambiosPendientes) { return false; };
+  if (this.ignoreExistPendingChanges) { return false; };
   return !this.myForm.pristine;
 }
 
@@ -72,7 +71,7 @@ this.idUser=this.activatedRoute.snapshot.paramMap.get('idUser');
   if (this.idUser == undefined) {
     return;
   }
-  this.modoEdicion = true;
+  this.editMode = true;
   this.userService.getUserId(this.idUser).subscribe(data => {
     console.log(data);
     this.newuser=data;
@@ -81,8 +80,8 @@ this.idUser=this.activatedRoute.snapshot.paramMap.get('idUser');
   }
 
  addUser(){
-    this.ignorarExistenCambiosPendientes = true;
-if (this.modoEdicion) {
+    this.ignoreExistPendingChanges = true;
+if (this.editMode) {
   var updateuser= {
     idUser:this.newuser.idUser,
     id_Card:this.newuser.id_Card,

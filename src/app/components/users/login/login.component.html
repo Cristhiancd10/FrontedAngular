@@ -11,7 +11,7 @@
                       <mat-form-field>
                           <input matInput placeholder="username" type="text" formControlName="username" [errorStateMatcher]="matcher">
                           <mat-error *ngIf="hasError('username', 'required')">
-                              Ingrese el usuario
+                            Enter the user
                           </mat-error>
                       </mat-form-field>
                   </p>
@@ -19,13 +19,13 @@
                       <mat-form-field>
                           <input matInput placeholder="Contraseña" type="password" formControlName="password">
                           <mat-error *ngIf="hasError('password', 'required')">
-                              Ingrese la contraseña
+                            Enter password
                           </mat-error>
                       </mat-form-field>
                   </p>
                   <div class="button">
-                      <button mat-raised-button [disabled]="!formLogin.valid" color="primary" type="submit">Iniciar
-                          Sesión</button>
+                      <button mat-raised-button [disabled]="!formLogin.valid" color="primary" type="submit">
+                        log in</button>
                   </div>
               </form>
           </mat-card-content>

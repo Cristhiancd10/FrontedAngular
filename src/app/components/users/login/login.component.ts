@@ -46,13 +46,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 Login() {
-    const usuarioLogin: Login = {
+    const userLogin: Login = {
       username: this.formLogin.value.username,
       password: this.formLogin.value.password,
     };
 
-    console.log(usuarioLogin);
-    this.subRef$ = this.dataService.login<Response>(usuarioLogin)
+    console.log(userLogin);
+    this.subRef$ = this.dataService.login<Response>(userLogin)
       .subscribe({
         next: (res) => {
           const token = res.body!.response;

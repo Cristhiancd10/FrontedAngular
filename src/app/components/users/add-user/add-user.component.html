@@ -1,5 +1,5 @@
 <div class="container my-5">
-  <h1>{{modoEdicion ? 'Editar' : 'Agregar'}} User</h1>
+  <h1>{{editMode ? 'Edit' : 'Add'}} User</h1>
   <form [formGroup]="myForm"  novalidate>
     <div class="col" cols="2" >
       <mat-form-field>
@@ -27,7 +27,7 @@
       <mat-form-field>
         <mat-label>Names: &nbsp;&nbsp;</mat-label>
         <input matInput type="text"  formControlName="names" class="form-control" id="names" name="names" [(ngModel)]="newuser.names">
-        <mat-error *ngIf="myForm!.get('names')!.hasError('required')">This field is required</mat-error>
+        <mat-error *ngIf="myForm!.get('names')!.hasError('required')">The names is required</mat-error>
       </mat-form-field>
       &nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -50,7 +50,7 @@
       </div>
       <div class="col" cols="2" >
         <mat-form-field>
-          <mat-label>Fecha Registro</mat-label>
+          <mat-label>Registration Date</mat-label>
           <input  matInput type="text" formControlName="registration_date" class="form-control" id="registration_date" name="registration_date"  [(ngModel)]="newuser.registration_date">
         </mat-form-field>
       </div>
