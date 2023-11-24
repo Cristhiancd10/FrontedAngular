@@ -42,7 +42,7 @@ export class UsersListComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
 
-   httpHeaders: HttpHeaders=new HttpHeaders();
+   //httpHeaders: HttpHeaders=new HttpHeaders();
   ngOnInit(): void {
     this.getUserList();
     this.idUser1=this.activatedRoute.snapshot.paramMap.get('idUser');
@@ -60,7 +60,6 @@ delete(id:any){
   alert(id);
   let httpHeaders: HttpHeaders=new HttpHeaders();
   var token =sessionStorage.getItem('token');
-  console.log('get token', token);
   httpHeaders = httpHeaders.append('Authorization','Bearer'+token);
   this.subRef$ = this.userService.delete(id).subscribe({
     next:(res) => {
@@ -72,7 +71,7 @@ delete(id:any){
       console.log('Error al eliminar al usuario',error);
     },});
 }
-  getUserList() {
+getUserList() {
     this.userService.GetAllUser()
     .subscribe({
       next: (user) => {

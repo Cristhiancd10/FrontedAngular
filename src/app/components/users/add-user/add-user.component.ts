@@ -5,6 +5,8 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 import { User } from 'src/app/models/user_model';
 import { UsersService } from 'src/app/services/users.service';
 import { formatDate } from "@angular/common";
+import { HttpHeaders } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -19,6 +21,8 @@ export class AddUserComponent implements OnInit {
   public idUser!:any;
   editMode: boolean = false;
   ignoreExistPendingChanges: boolean = false;
+
+  subRef$?: Subscription;
 
    newuser: User = {
     idUser:0,
@@ -73,7 +77,7 @@ this.idUser=this.activatedRoute.snapshot.paramMap.get('idUser');
   }
   this.editMode = true;
   this.userService.getUserId(this.idUser).subscribe(data => {
-    console.log(data);
+    console.log("getuserid"+data);
     this.newuser=data;
 
   });
@@ -94,24 +98,31 @@ if (this.editMode) {
     city:this.newuser.city,
     registration_date:this.newuser.registration_date
   };
-
-      this.userService
-      .updatetUser(this.idUser, updateuser)
+  let httpHeaders: HttpHeaders=new HttpHeaders();
+  var token =sessionStorage.getItem('token');
+  httpHeaders = httpHeaders.append('Authorization','Bearer'+token);
+  this.subRef$ = this.userService.updatetUser(this.idUser,updateuser)
       .subscribe({
         next:(user) => {
-        console.log(user);
-        this.router.navigate(['']);
+          console.log('get token', token, "id "+this.idUser);
+        this.router.navigate(['list']);
 
       },
       error:(response) =>{
         console.log(response);
       },});
-}else{console.log(this.newuser);
+}else{
+  let httpHeaders: HttpHeaders=new HttpHeaders();
+  var token =sessionStorage.getItem('token');
+  console.log('get token', token);
+  httpHeaders = httpHeaders.append('Authorization','Bearer'+token);
+  console.log('get http', httpHeaders);
+  console.log(this.newuser);
   this.userService.insertUser(this.newuser)
 .subscribe({
   next: (user) => {
     console.log(user);
-    this.router.navigate([''])
+    this.router.navigate(['list'])
   },
   error:(response) =>{
     console.log(response);
@@ -119,6 +130,12 @@ if (this.editMode) {
 
 })}
 
+  }
+
+  ngOnDestroy() {
+    if (this.subRef$) {
+      this.subRef$.unsubscribe();
+    }
   }
 }
 

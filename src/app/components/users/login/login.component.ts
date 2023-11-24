@@ -59,7 +59,7 @@ Login() {
           console.log('token', token);
           //this.securityService.SetAuthData(token);
           sessionStorage.setItem('token', token);
-           this.router.navigate(['']);
+           this.router.navigate(['list']);
         },
         error:(response) =>{
           console.log(response);

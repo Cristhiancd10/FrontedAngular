@@ -30,13 +30,18 @@ export class UsersService {
   //Post User
   insertUser(user:User ):Observable<any>{
     user.idUser=0;
-
-    return this.http.post(`${this.apiURL}insertUser`, user, {headers: this.httpHeaders})
+     const httpHeaders: HttpHeaders = this.getHeaders();
+    return this.http.post(`${this.apiURL}insertUser`, user, {headers: httpHeaders})
   }
 
   //Update User
   updatetUser(id:number, user:User):Observable<any>{
-    return this.http.put(`${this.apiURL}UpdateUser`+user.idUser,user, { responseType: 'text'});
+    const httpHeaders: HttpHeaders = this.getHeaders();
+    return this.http.put(`${this.apiURL}UpdateUser`+id,user,
+    {
+      headers: httpHeaders,
+      responseType: 'text'
+    })
   }
 
   //Delete User
@@ -66,6 +71,10 @@ getHeaders(): HttpHeaders {
     }
 
   return httpHeaders;
+}
+
+logout() {
+  sessionStorage.removeItem('token');
 }
 
 
