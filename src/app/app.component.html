@@ -1,26 +1,15 @@
-<nav class="navbar navbar-expand-lg navbar-beige bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="list">FrontedAppAngular</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-       <li class="nav-item">
-          <a class="nav-link active" aria-current="page" routerLink="addUser">ADD USER</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" routerLink="list">LIST</a>
-        </li>
-        <li class="nav-item" style="margin-left: 900px;">
-          <a class="nav-link active" aria-current="page" routerLink="">LOGIN</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" (click)="logout()">LOGOUT</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<router-outlet></router-outlet>
+<mat-toolbar color="primary">
+  <a class="title" href="/">{{ title }}</a>
+  <div class="toolbar-spacer"></div>
+  <a mat-button [routerLink]="['todo-view']">User List</a>
+  <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">Login</button>
+  <button mat-raised-button color="accent" *ngIf="loginDisplay" (click)="logout()">Logout</button>
+</mat-toolbar>
+<div class="container">
+  <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
+  <router-outlet *ngIf="!isIframe"></router-outlet>
+</div>
+<footer *ngIf="loginDisplay">
+  <mat-toolbar>
+    <div class="footer-text"> ¿Como lo hicimos? </div>
+  </mat-toolbar>

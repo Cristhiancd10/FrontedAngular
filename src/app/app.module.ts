@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
 
 import {ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -30,12 +30,32 @@ import {MatCardModule} from '@angular/material/card';
 
 import {MatDividerModule} from '@angular/material/divider';
 
-
-import * as _moment from 'moment';
 import { LoginComponent } from './components/users/login/login.component';
 
+import { MatToolbarModule } from '@angular/material/toolbar';
 
-
+import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
+import { msalConfig, loginRequest, protectedResources } from './auth-config';
+import { IPublicClientApplication, InteractionType, PublicClientApplication } from '@azure/msal-browser';
+import { UsersService } from './services/users.service';
+export function MSALInstanceFactory(): IPublicClientApplication {
+    return new PublicClientApplication(msalConfig);
+}
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+    const protectedResourceMap = new Map < string,
+        Array < string >> ();
+   // protectedResourceMap.set(protectedResources.todoListApi.endpoint, protectedResources.todoListApi.scopes);
+    return {
+        interactionType: InteractionType.Redirect,
+        protectedResourceMap
+    };
+}
+export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+    return {
+        interactionType: InteractionType.Redirect,
+        authRequest: loginRequest
+    };
+}
 
 @NgModule({
   declarations: [
@@ -68,9 +88,28 @@ import { LoginComponent } from './components/users/login/login.component';
     MatFormFieldModule,
     BrowserAnimationsModule,
     FormsModule,
-    MatCardModule
+    MatCardModule,
+    MsalModule,
+    MatToolbarModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+            useClass: MsalInterceptor,
+            multi: true
+        }, {
+            provide: MSAL_INSTANCE,
+            useFactory: MSALInstanceFactory
+        }, {
+            provide: MSAL_GUARD_CONFIG,
+            useFactory: MSALGuardConfigFactory
+        }, {
+            provide: MSAL_INTERCEPTOR_CONFIG,
+            useFactory: MSALInterceptorConfigFactory
+  },
+  MsalService,
+        MsalGuard,
+        MsalBroadcastService,
+        UsersService],
+  bootstrap: [AppComponent,MsalRedirectComponent]
 })
 export class AppModule { }

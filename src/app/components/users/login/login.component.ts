@@ -12,12 +12,13 @@ import { ErrorStateMatcher1 } from 'src/app/error-state-matcher1';
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnDestroy {
   formLogin: FormGroup;
   subRef$?: Subscription;
   matcher = new ErrorStateMatcher1();
   scrHeight: any;
   scrWidth: any;
+
 
   // HostListener: https://angular.io/api/core/HostListener
   @HostListener('window:resize', ['$event'])
@@ -42,8 +43,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-  }
 
 Login() {
     const userLogin: Login = {
@@ -55,10 +54,13 @@ Login() {
     this.subRef$ = this.dataService.login<Response>(userLogin)
       .subscribe({
         next: (res) => {
+
           const token = res.body!.response;
           console.log('token', token);
           //this.securityService.SetAuthData(token);
           sessionStorage.setItem('token', token);
+          
+          console.log("islogging "+this.dataService.isLoggedInUser());
            this.router.navigate(['list']);
         },
         error:(response) =>{
@@ -77,5 +79,6 @@ Login() {
       this.subRef$.unsubscribe();
     }
   }
+
 
 }
